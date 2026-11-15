@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Moolchand’s Grocery Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<script src="js/config.js"></script>
+
+<header>
+  <span class="brand">🛒 Moolchand’s Grocery Store</span>
+  <nav>
+    <button class="tab on" id="tShop" onclick="go('shop')">Shop</button>
+    <button class="tab" id="tAdmin" onclick="go('admin')">Owner panel</button>
+    <button class="alt" onclick="cartOpen(true)">Cart (<span id="count">0</span>)</button>
+  </nav>
+</header>
+
+<div id="shop">
+  <div class="ticker"><span>⚡ 30-minute delivery &nbsp;•&nbsp; FREE delivery above ₹299 &nbsp;•&nbsp; Fresh stock every morning &nbsp;•&nbsp; Pay on delivery &nbsp;•&nbsp; Order directly on WhatsApp &nbsp;•&nbsp; Lowest prices in the area</span></div>
+  <section class="hero">
+    <div>
+      <h1>Ghar ka rashan,<br>30 minute mein.</h1>
+      <p>Fresh stock, lowest prices and free delivery above ₹299. Pick your items and send the order straight to our WhatsApp.</p>
+      <div class="cta">
+        <a class="btn alt" href="#products">Shop now</a>
+        <a class="btn wa" id="heroWa" target="_blank" rel="noopener"><svg class="i" viewBox="0 0 24 24" id="waIco"></svg> Order on WhatsApp</a>
+      </div>
+    </div>
+    <div class="sticker"><small>UP TO</small><b id="maxOff">25%</b><small>OFF TODAY</small></div>
+  </section>
+  <div class="trust"><span>⚡ 30-min delivery</span><span>✅ Fresh daily stock</span><span>💵 Pay on delivery</span><span>⭐ 4.8 store rating</span></div>
+
+  <main>
+    <h2 class="sec">🔥 Top deals</h2>
+    <div class="grid" id="deals"></div>
+    <h2 class="sec" id="products">All products</h2>
+    <div class="tools"><input id="q" type="search" placeholder="Search rice, dal, milk, chips..." aria-label="Search" oninput="drawShop()"></div>
+    <div class="chips" id="chips"></div>
+    <div class="grid" id="grid"></div>
+  </main>
+</div>
+
+<main id="admin" hidden>
+  <div class="panel" id="login">
+    <h2>Owner login</h2><p class="muted">Enter your password to access the admin panel.</p>
+    <form onsubmit="login(event)"><input id="pw" type="password" placeholder="Password" required><button>Log in</button></form>
+    <p class="msg err" id="loginMsg"></p>
+  </div>
+  <div id="panelBox" hidden>
+    <div class="panel"><h2>Add a new product</h2>
+      <form onsubmit="addProduct(event)">
+        <input id="n" placeholder="Name" required><input id="c" placeholder="Category" required>
+        <input id="p" type="number" min="0" placeholder="Price ₹" required style="width:100px">
+        <input id="m" type="number" min="0" placeholder="MRP ₹" style="width:100px">
+        <input id="u" placeholder="Unit (1 kg)" style="width:110px">
+        <input id="s" type="number" min="0" placeholder="Stock" required style="width:90px">
+        <input id="i" placeholder="Emoji" style="width:70px"><button>Add product</button>
+      </form></div>
+    <h2>Stock and prices</h2><p class="muted" style="margin-bottom:10px">Use + / − for stock, or type a value and press Save.</p>
+    <div class="wrap"><table><thead><tr><th>Product</th><th>Price ₹</th><th>Stock</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
+    <h2 style="margin-top:28px">Recent orders</h2>
+    <div class="wrap"><table><tbody id="orders"></tbody></table></div>
+    <button class="danger" style="margin-top:18px" onclick="resetDemo()">Reset demo data</button>
+  </div>
+</main>
+
+<footer id="contact">
+  <div class="cols">
+    <div><h3>Moolchand’s Grocery Store</h3><p style="margin-top:8px">Your neighbourhood kirana, now online. Fast delivery, fair prices, fresh stock.</p></div>
+    <div><h3>Contact us</h3><div class="links">
+      <a id="fCall"><svg class="i" viewBox="0 0 24 24" data-i="phone"></svg><span id="fPhone"></span></a>
+      <a id="fWa" target="_blank" rel="noopener"><svg class="i" viewBox="0 0 24 24" data-i="wa"></svg> WhatsApp us</a>
+      <a id="fMap" target="_blank" rel="noopener"><svg class="i" viewBox="0 0 24 24" data-i="pin"></svg><span id="fAddr"></span></a></div></div>
+    <div><h3>Follow us</h3><div class="social">
+      <a href="https://www.instagram.com/madankiryanastore/" aria-label="Instagram"><svg class="i" viewBox="0 0 24 24" data-i="ig"></svg> Instagram</a>
+      <a href="https://www.youtube.com/watch?v=9MNyKTXeUzM&t=35s " target="_blank" rel="noopener" aria-label="YouTube"><svg class="i" viewBox="0 0 24 24" data-i="yt"></svg> YouTube</a>
+    </div>
+    <p style="margin-top:14px">Open daily, 9 AM to 10 PM</p></div>
+  </div>
+</footer>
+<a class="btn wa float" id="floatWa" target="_blank" rel="noopener"><svg class="i" viewBox="0 0 24 24" data-i="wa"></svg> Order on WhatsApp</a>
+
+<aside id="cart" aria-label="Your cart">
+  <h2>Your cart</h2><div id="lines"></div>
+  <p class="muted" id="freeMsg" style="margin-top:8px"></p>
+  <p class="muted">Delivery: <span id="fee">₹0</span></p>
+  <p class="price" style="margin:8px 0 12px">Total: ₹<span id="total">0</span></p>
+  <input id="name" placeholder="Your name" style="width:100%;margin-bottom:8px">
+  <input id="phone" placeholder="Phone number" style="width:100%;margin-bottom:8px">
+  <input id="addr" placeholder="Delivery address" style="width:100%;margin-bottom:8px">
+  <button class="wa" style="width:100%;margin-bottom:8px;justify-content:center" onclick="placeOrder()">Send order on WhatsApp</button>
+  <p class="msg" id="msg"></p>
+  <button class="alt" style="width:100%;justify-content:center" onclick="cartOpen(false)">Keep shopping</button>
+</aside>
+
+<script src="js/app.js"></script>
+</body>
+</html>
